@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Lista</title>
+</head>
+<style>
+    body{
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    background-color: cornsilk;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    padding-top: 100px;
+}
+
+.container{
+    background-color: ghostwhite;
+    padding: 10px;
+    border-radius: 14px;
+    box-shadow: 5px 5px 5px darkgrey;
+}
+
+#text{
+    background-color: white;
+    border-radius: 14px;
+    border: 2px solid darkgrey;
+    outline:none;
+    transition: border-color 0,3s;;
+}
+
+#text:focus{
+    border-color: slategray;
+    box-shadow: 0px 0px 5px #4a90e2;
+
+}
+
+#btn{
+    background-color: gold;
+    border-radius: 10px;
+    border:1px solid;
+    font-size: 16px;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+   
+}
+
+#btn:hover{
+    background-color: goldenrod;
+     box-shadow: 0px 4px 8px rgba(218, 165, 32, 0.5);
+
+}
+
+button{
+    border: none;
+    background-color: ghostwhite;
+}
+
+.concluido {
+  text-decoration: line-through;
+  color: gray;
+}
+
+h2{
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+
+
+</style>
+<body>
+    <div class="container">
+<h2>Lista de afazeres</h2>
+  
+    <input type="text" id="text" placeholder="Adicione suas tarefas aqui">
+
+    <button onclick="mostraFruta()" id="btn">adicionar</button>
+
+    <ul id="lista"></ul>
+
+    <p>total de itens <span id="total">0</span></p>
+  </div>
+</body>
+<script >let lista = [];
+
+function mostraFruta() {
+    let input = document.getElementById('text');
+    let texto = input.value.trim();
+
+    if (texto === '') {
+        alert('Digite algo');
+        return;
+    }
+
+    lista.push({ nome: texto, concluido: false }); // agora cada item é um objeto
+    input.value = '';
+    mostrarLista();
+}
+
+function mostrarLista() {
+    let ul = document.getElementById('lista');
+    ul.innerHTML = '';
+
+    for (let i = 0; i < lista.length; i++) {
+        let li = document.createElement('li');
+
+        if (lista[i].concluido) {
+            li.classList.add('concluido');
+        }
+
+        li.textContent = lista[i].nome + ' ';
+
+        // Botão concluir
+        let btnConcluir = document.createElement('button');
+        btnConcluir.textContent = '✅';
+        btnConcluir.style.marginLeft = '10px';
+
+        btnConcluir.onclick = (function(index) {
+            return function() {
+                lista[index].concluido = !lista[index].concluido; // alterna concluído
+                mostrarLista();
+            };
+        })(i);
+
+        // Botão remover
+        let btnRemover = document.createElement('button');
+        btnRemover.textContent = '❌';
+        btnRemover.style.marginLeft = '10px';
+
+        btnRemover.onclick = (function(index) {
+            return function() {
+                lista.splice(index, 1);
+                mostrarLista();
+            };
+        })(i);
+
+        li.appendChild(btnConcluir);
+        li.appendChild(btnRemover);
+        ul.appendChild(li);
+    }
+
+    document.getElementById('total').textContent = lista.length;
+}
+</script>
+</html>
